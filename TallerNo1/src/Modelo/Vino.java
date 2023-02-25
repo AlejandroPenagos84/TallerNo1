@@ -10,16 +10,16 @@ package Modelo;
  */
 public class Vino {
     
-    private int identifiacion;
+    private String identifiacion;
     private String marca;
     private String color;
     private String edad;
 
-    public int getIdentifiacion() {
+    public String getIdentifiacion() {
         return identifiacion;
     }
 
-    public void setIdentifiacion(int identifiacion) {
+    public void setIdentifiacion(String identifiacion) {
         this.identifiacion = identifiacion;
     }
 

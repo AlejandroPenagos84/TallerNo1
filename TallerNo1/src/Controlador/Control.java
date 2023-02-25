@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -29,7 +29,7 @@ public class Control implements ActionListener  {
         this.iniciar();
     }
     
-    public void agregarVino(int identificador, String marca, String Color, String Edad){
+    public void agregarVino(String identificador, String marca, String Color, String Edad){
         boolean estado = false;
         Iterator <Vino> it = listaVinos.iterator();
         Vino aux; 
@@ -38,31 +38,32 @@ public class Control implements ActionListener  {
             aux = (Vino) it.next();//Está linea es para crear una variable auxiliar 
             //Casting: Convertir forzadamente algo que no conozoco en algo que si
                     
-            if(aux.getIdentifiacion() == identificador){
+            if(aux.getIdentifiacion().equals(identificador)){
                 estado = true;
             }
         }
         
-        if(!estado){
+        if(estado){
+            vista.MostrarMensaje("Vino ya existe");
+        }else{ 
             vino = new Vino();
             vino.setIdentifiacion(identificador);
             vino.setMarca(marca);
             vino.setColor(Color);
             vino.setEdad(Edad);
             listaVinos.add(vino);
-            vista.MostrarMensaje1();
+            vista.MostrarMensaje("Vino Insertado");
             vista.blanquearCampos();
-        }else{
-            vista.MostrarMensaje2();
         }
     }
     
-    public void consultarVino(int identificador){
+    
+    public void consultarVino(String identificador){
         int k = -1;
         for(int i = 0; i <listaVinos.size();i++){
-            if(listaVinos.get(i).getIdentifiacion() == identificador){
+            if(listaVinos.get(i).getIdentifiacion().equals(identificador)){
                 k = i;
-                this.vista.txtIdentificadorConsultar.setText(String.valueOf(listaVinos.get(k).getIdentifiacion()));
+                this.vista.txtIdentificadorConsultar.setText((listaVinos.get(k).getIdentifiacion()));
                 this.vista.txtMarcaConsultar.setText(String.valueOf(listaVinos.get(k).getMarca()));
                 this.vista.txtColorConsultar.setText(String.valueOf(listaVinos.get(k).getColor()));
                 this.vista.txtEdadConsultar.setText(String.valueOf(listaVinos.get(k).getEdad()));
@@ -71,40 +72,77 @@ public class Control implements ActionListener  {
         }           
 
         if(k==-1){
-            vista.MostrarMensaje4();
+            vista.MostrarMensaje("El vino no está registrado");
             }
         }
     
+    
+    /*
+    Opción 2 =)
+    public void consultarVino(String identificador){
+        boolean estado = false;
+        Iterator <Vino> it = listaVinos.iterator();
+        Vino aux; 
+        
+        while(it.hasNext()){
+            aux = (Vino) it.next();//Está linea es para crear una variable auxiliar 
+            //Casting: Convertir forzadamente algo que no conozoco en algo que si
+                    
+            if(aux.getIdentifiacion().equals(identificador)){
+                estado = true;
+                this.vista.txtIdentificadorConsultar.setText(aux.getIdentifiacion());
+                this.vista.txtMarcaConsultar.setText(String.valueOf(aux.getMarca()));
+                this.vista.txtColorConsultar.setText(String.valueOf(aux.getColor()));
+                this.vista.txtEdadConsultar.setText(String.valueOf(aux.getEdad()));
+            }
+        }
+        
+        if(!estado){
+            vista.MostrarMensaje("El vino no está registrado");
+            }
+        }
+      */
+    
     public void iniciar() {
-        this.vista.setTitle("Multiplicar numeros");
+        this.vista.setTitle("Vinos");
         //Se le indica la posicion --> null para que la ventana inicie en la posicion 0 es decir en el centro de la pantalla
         vista.setVisible(true);
         this.vista.setLocationRelativeTo(null);
     }
     
+    public boolean ValidarId(String m){
+        boolean estado = true;
+        for(int i = 0; i < m.length();i++){
+            if(!Character.isDigit(m.charAt(i))){
+                estado = false;
+            }
+        }
+        return estado;    
+    }
     
     @Override
     public void actionPerformed(ActionEvent e){
         
        if(e.getSource() == this.vista.btnInsertar){
           if((this.vista.txtIdentificador.getText().isEmpty())||
-             (this.vista.txtMarca.getText().isEmpty())){
-              vista.MostrarMensaje5();
+             (this.vista.txtMarca.getText().isEmpty())||
+             (this.vista.txtColor.getSelectedItem()== null)||
+             (this.vista.txtEdad.getSelectedItem())== null){
+              vista.MostrarMensaje("Debes rellenar todos los espacios");
+          }else if(!ValidarId(this.vista.txtIdentificador.getText())){//si es falso
+              vista.MostrarMensaje("Solo puedes ingresar ID númericos");
           }else{
-              this.agregarVino(Integer.parseInt(this.vista.txtIdentificador.getText()),this.vista.txtMarca.getText(),(String) this.vista.txtColor.getSelectedItem(),(String)this.vista.txtEdad.getSelectedItem());
+              this.agregarVino((this.vista.txtIdentificador.getText()),this.vista.txtMarca.getText(),(String) this.vista.txtColor.getSelectedItem(),(String)this.vista.txtEdad.getSelectedItem());
          }
        }
        
        if(e.getSource()==this.vista.btnConsultar){
-           try{
-               if(listaVinos.isEmpty()){
-                   if(listaVinos.isEmpty())
-                    vista.MostrarMensaje3();
-               }else{
-                    this.consultarVino(Integer.parseInt(this.vista.txtIdentificadorConsultar.getText()));
-                }
-           }catch(Exception a){
-               vista.MostrarMensaje5();
+            if(listaVinos.isEmpty()){
+                vista.MostrarMensaje("No se ha ingresado ningún vino");
+            }else if(this.vista.txtIdentificadorConsultar.getText().isEmpty()){
+                vista.MostrarMensaje("Debes rellenar todos los espacios");   
+            }else{
+               this.consultarVino(this.vista.txtIdentificadorConsultar.getText());   
            }
        }
        

@@ -4,12 +4,16 @@
  */
 package Controlador;
 
+/*•	Javier Alejandro Penagos Hernández - 20221020028
+•	David Esteban Sainea Rubio - 20221020025
+•	Tomas Cardenas Benitez  -  20221020021
+*/
 /**
  *
  * @author Alejandro Penagos
  */
 public class Launcher {
     public static void main(String[] args){
-        Control control = new Control();
+        new Control();
     }
 }
